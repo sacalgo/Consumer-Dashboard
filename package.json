@@ -1,0 +1,5 @@
+{
+  "name": "customer-dashboard",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"]
+}
