@@ -7,7 +7,9 @@ const app = express();
 const PORT = 3001;
 
 app.use(cors());
-
+app.get("/", (_req, res) => {
+  res.send("Hi this is the root endpoint, you can check with localhost:3001/live or localhost:3001/history");
+});
 app.get('/live', (_req, res) => {
   res.json(getLiveData());
 });
