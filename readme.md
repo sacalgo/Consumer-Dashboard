@@ -1,6 +1,6 @@
 # Customer Dashboard
 
-A monorepo project built using React, Next.js, TypeScript on the frontend and Node.js, Express.js, TypeScript, Kafka on the backend.
+A monorepo project built using **React, Next.js, TypeScript** on the frontend and **Node.js, Express.js, TypeScript, Kafka** on the backend.
 
 ## 📁 Folder Structure
 
@@ -9,8 +9,8 @@ customer-dashboard/
 ├── apps/
 │   ├── backend/                # Express + Kafka backend service
 │   │   ├── src/
-│   │   │   ├── kafka/          # Kafka consumer logic
-│   │   │   └── index.ts        # Express server entry
+│   │   │   ├── kafka/          # Kafka consumer & fake producer logic
+│   │   │   └── index.ts        # API route handlers (live/history)
 │   │   └── tsconfig.json
 │   └── frontend/               # Next.js frontend app
 │       ├── pages/              # Next.js pages
@@ -66,8 +66,8 @@ npm run dev
 ```
 
 * Express server runs on [http://localhost:3001](http://localhost:3001)
-* Live data endpoint: `/live`
-* History data endpoint: `/history`
+* Live data endpoint: [http://localhost:3001/live](http://localhost:3001/live)
+* History data endpoint: [http://localhost:3001/history](http://localhost:3001/history)
 
 ### 5. Frontend Setup
 
@@ -78,6 +78,22 @@ npm run dev
 ```
 
 * Frontend runs on [http://localhost:3000](http://localhost:3000)
+
+## 📡 Frontend and Backend Communication
+
+* The frontend fetches live and historical data from the backend via:
+
+  * `http://localhost:3001/live`
+  * `http://localhost:3001/history`
+
+> These are not frontend routes. Make sure the backend is running to receive data.
+
+You can call these from your React components using `fetch()` or `axios`:
+
+```ts
+const response = await fetch('http://localhost:3001/live');
+const data = await response.json();
+```
 
 ## 🔧 Scripts
 
@@ -93,6 +109,24 @@ npm run dev
 | ------------- | ------------------------ |
 | `npm run dev` | Start Next.js dev server |
 
+## 🧪 Kafka Event Generator (Fake Producer)
+
+To simulate customer events and test your Kafka consumer/backend, run the fake producer:
+
+```bash
+npx ts-node apps/backend/src/kafka/fakeProducer.ts
+```
+
+This script produces a new random message to Kafka every 3 seconds:
+
+```json
+{ "store_id": 10, "customers_in": 2, "customers_out": 1, "time_stamp": "10:12:03" }
+```
+
+To stop the producer: press `Ctrl + C` in the terminal.
+
+> Optionally, you can improve the producer script to handle graceful shutdown by listening to `SIGINT` and calling `producer.disconnect()`.
+
 ## 🧠 Kafka Troubleshooting
 
 * **Docker must be running**: Ensure Docker daemon is active
@@ -103,7 +137,3 @@ npm run dev
 
 * Shared types across frontend/backend are managed via the `packages/shared-types` package
 * This is a monorepo using `npm workspaces`, no need to `npm install` separately inside packages.
-
----
-
-Let me know if you'd like to add tests, CI, or deploy instructions!
