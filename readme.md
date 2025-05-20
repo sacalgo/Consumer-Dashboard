@@ -1,6 +1,6 @@
 # Customer Dashboard
 
-A monorepo project built using **React, Next.js, TypeScript** on the frontend and **Node.js, Express.js, TypeScript, Kafka** on the backend.
+A monorepo project built using React, Next.js, TypeScript on the frontend and Node.js, Express.js, TypeScript, Kafka on the backend.
 
 ## 📁 Folder Structure
 
